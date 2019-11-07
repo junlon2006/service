@@ -2,6 +2,7 @@ package com.github.junlon2006.microservice.service;
 
 import com.github.junlon2006.microservice.data.Result;
 import com.github.junlon2006.microservice.entity.MicroTortoiseInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,6 +14,9 @@ import java.util.List;
  * @since jdk8
  */
 public interface MicroService {
+
+    Result<?> getInfoByName(String name);
+
     /**
      * get all tortoise information
      *
@@ -27,4 +31,13 @@ public interface MicroService {
      * @return
      */
     Result<?> setTortoiseList(List<MicroTortoiseInfo> tortoiseInfos);
+
+    /**
+     * set tortoise picture
+     *
+     * @param microTortoiseInfo
+     * @param file
+     * @return
+     */
+    Result<?> saveTortoisePicture(MicroTortoiseInfo microTortoiseInfo, MultipartFile file);
 }

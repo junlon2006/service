@@ -23,8 +23,6 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @TableName("tortoise_info")
 public class MicroTortoiseInfo extends Model<MicroTortoiseInfo> {
     @TableId(type = IdType.AUTO)
