@@ -33,7 +33,7 @@ public class MicroController {
      * @return
      */
     @GetMapping("/get-all")
-    public Result<?> getTortoiseInfo() {
+    public Result<List<MicroTortoiseInfo>> getTortoiseInfo() {
         return microService.getAllTortoiseInfo();
     }
 
@@ -45,20 +45,33 @@ public class MicroController {
      */
     @PostMapping(value = "/set-list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Result<?> setTortoiseInfo(@RequestBody @Validated List<MicroTortoiseInfo> tortoiseInfos) {
+    public Result<List<MicroTortoiseInfo>> setTortoiseInfo(@RequestBody @Validated List<MicroTortoiseInfo> tortoiseInfos) {
         return microService.setTortoiseList(tortoiseInfos);
     }
 
-    @PostMapping(value = "/find-byname", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
+    /**
+     * get tortoise information by name
+     *
+     * @param name
+     * @return
+     */
+    @PostMapping(value = "/find-by-name", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Result<?> getInfoByName(@RequestBody String name) {
+    public Result<MicroTortoiseInfo> getInfoByName(@RequestBody String name) {
         return microService.getInfoByName(name);
     }
 
+    /**
+     * save tortoise picture
+     *
+     * @param microTortoiseInfo
+     * @param file
+     * @return
+     */
     @PostMapping(value = "/save-pic", produces = MediaType.APPLICATION_JSON_UTF8_VALUE,
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Result<?> saveTortoisePicture(@RequestPart("microTortoiseInfo") String microTortoiseInfo,
-                                         @RequestParam("picture") MultipartFile file) {
+    public Result saveTortoisePicture(@RequestPart("microTortoiseInfo") String microTortoiseInfo,
+                                      @RequestParam("picture") MultipartFile file) {
         return microService.saveTortoisePicture(JSON.parseObject(microTortoiseInfo, MicroTortoiseInfo.class), file);
     }
 
