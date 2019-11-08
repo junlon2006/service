@@ -78,26 +78,45 @@ public class MicroServiceImpl implements MicroService {
     }
 
     @Override
-    public Result<?> setTortoiseList(List<MicroTortoiseInfo> tortoiseInfos) {
+    public Result<List<MicroTortoiseInfo>> setTortoiseList(List<MicroTortoiseInfo> tortoiseInfos) {
         tortoiseInfos.forEach(c -> handleSetTortoiseList(c));
-        return Result.builder().code(200).message("SUCCESS").data(tortoiseInfos).build();
+
+        Result<List<MicroTortoiseInfo>> result = new Result<>();
+        result.setMessage("SUCCESS");
+        result.setData(tortoiseInfos);
+        result.setCode(200);
+
+        return result;
     }
 
     @Override
-    public Result<?> getInfoByName(String name) {
+    public Result<MicroTortoiseInfo> getInfoByName(String name) {
         MicroTortoiseInfo microTortoiseInfo = getTortoiseInfoByName(name);
-        return Result.builder().code(200).message("SUCCESS").data(microTortoiseInfo).build();
+
+        Result<MicroTortoiseInfo> result = new Result<>();
+        result.setMessage("SUCCESS");
+        result.setCode(200);
+        result.setData(microTortoiseInfo);
+        
+        return result;
     }
 
     @Override
-    public Result<?> getAllTortoiseInfo() {
+    public Result<List<MicroTortoiseInfo>> getAllTortoiseInfo() {
         List<MicroTortoiseInfo> tortoiseInfos = microTortoiseInfoMapper.selectList(new QueryWrapper<>());
-        return Result.builder().code(200).message("SUCCESS").data(tortoiseInfos).build();
+
+        Result<List<MicroTortoiseInfo>> result = new Result<>();
+        result.setMessage("SUCCESS");
+        result.setCode(200);
+        result.setData(tortoiseInfos);
+
+        return result;
     }
 
     @Override
-    public Result<?> saveTortoisePicture(MicroTortoiseInfo microTortoiseInfo, MultipartFile file) {
+    public Result saveTortoisePicture(MicroTortoiseInfo microTortoiseInfo, MultipartFile file) {
         log.info("microTortoiseInfo={}, file={}, len={}", microTortoiseInfo, file, file.getSize());
-        return Result.builder().code(200).message("SUCCESS").data(microTortoiseInfo).build();
+        return Result.builder().code(200).message("SUCCESS").build();
     }
+
 }
