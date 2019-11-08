@@ -15,14 +15,20 @@ import java.util.List;
  */
 public interface MicroService {
 
-    Result<?> getInfoByName(String name);
+    /**
+     * get tortoise information by name, just return first match item
+     *
+     * @param name
+     * @return
+     */
+    Result<MicroTortoiseInfo> getInfoByName(String name);
 
     /**
      * get all tortoise information
      *
      * @return
      */
-    Result<?> getAllTortoiseInfo();
+    Result<List<MicroTortoiseInfo>> getAllTortoiseInfo();
 
     /**
      * set tortoise information
@@ -30,7 +36,7 @@ public interface MicroService {
      * @param tortoiseInfos
      * @return
      */
-    Result<?> setTortoiseList(List<MicroTortoiseInfo> tortoiseInfos);
+    Result<List<MicroTortoiseInfo>> setTortoiseList(List<MicroTortoiseInfo> tortoiseInfos);
 
     /**
      * set tortoise picture
@@ -39,5 +45,5 @@ public interface MicroService {
      * @param file
      * @return
      */
-    Result<?> saveTortoisePicture(MicroTortoiseInfo microTortoiseInfo, MultipartFile file);
+    Result saveTortoisePicture(MicroTortoiseInfo microTortoiseInfo, MultipartFile file);
 }
