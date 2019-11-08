@@ -36,30 +36,48 @@ public class MicroServiceImpl implements MicroService {
         map.put(microTortoiseInfo.getName(), microTortoiseInfo);
     }
 
+    private void insertNull2Redis(String name) {
+        RMap<String, MicroTortoiseInfo> map = redissonClient.getMap(redissonMap);
+        MicroTortoiseInfo microTortoiseInfo = new MicroTortoiseInfo();
+        map.put(name, microTortoiseInfo);
+    }
+
     private MicroTortoiseInfo getInfoFromRedis(String name) {
         RMap<String, MicroTortoiseInfo> map = redissonClient.getMap(redissonMap);
         return map.get(name);
     }
 
     private MicroTortoiseInfo getInfoFromMySql(String name) {
+
         MicroTortoiseInfo queryResult = microTortoiseInfoMapper.selectOne(new QueryWrapper<MicroTortoiseInfo>()
                 .lambda()
                 .eq(MicroTortoiseInfo::getName, name));
         if (Objects.nonNull(queryResult)) {
+            /**
+             * 从数据库读取出数据，然后写入redis缓存
+             */
             insertData2Redis(queryResult);
+        } else {
+            /**
+             * 如果查询的数据不存在，则向redis写入空，抵御缓存击穿攻击
+             */
+            insertNull2Redis(name);
         }
 
         return queryResult;
     }
 
     private MicroTortoiseInfo getTortoiseInfoByName(String name) {
-        MicroTortoiseInfo microTortoiseInfo;
-        microTortoiseInfo = getInfoFromRedis(name);
+        MicroTortoiseInfo microTortoiseInfo = getInfoFromRedis(name);
         if (Objects.nonNull(microTortoiseInfo)) {
+            log.info("get result from redis, result={}", microTortoiseInfo);
             return microTortoiseInfo;
         }
 
-        return getInfoFromMySql(name);
+        microTortoiseInfo = getInfoFromMySql(name);
+        log.info("get result from mysql, result={}", microTortoiseInfo);
+
+        return microTortoiseInfo;
     }
 
     private void handleSetTortoiseList(MicroTortoiseInfo microTortoiseInfo) {
@@ -97,7 +115,7 @@ public class MicroServiceImpl implements MicroService {
         result.setMessage("SUCCESS");
         result.setCode(200);
         result.setData(microTortoiseInfo);
-        
+
         return result;
     }
 
