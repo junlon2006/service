@@ -40,6 +40,7 @@ public class MicroServiceImpl implements MicroService {
         RMap<String, MicroTortoiseInfo> map = redissonClient.getMap(redissonMap);
         MicroTortoiseInfo microTortoiseInfo = new MicroTortoiseInfo();
         map.put(name, microTortoiseInfo);
+
     }
 
     private MicroTortoiseInfo getInfoFromRedis(String name) {
